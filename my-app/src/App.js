@@ -1,6 +1,9 @@
 import React, { createRef, useEffect, useState } from 'react';
 import './App.css';
 import { Tasklist } from './pages/tasklist';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
   const [data,setdata] = useState([]);
@@ -45,6 +48,7 @@ function App() {
   // function to add task
   const handleAddTask = async()=>{
     if (input.current.value === '') {
+      toast("Task Cannot be Empty!");
       return;
     }
     let newData = {
@@ -64,8 +68,10 @@ function App() {
       const addedTask = await response.json();
       setdata((prevTasks) => [addedTask,...prevTasks]);
       clearInput();
+      toast.success("Task Added Successfully !");
     }catch (error) {
       console.log('Error adding task:', error);
+      toast.error("SomeThing Went Wrong!");
     }
 
   }
@@ -79,8 +85,10 @@ function App() {
       const deletedData = await response.json();
       let newData = data.filter((task)=> task.id !== id);
       setdata(newData);
+      toast.success("Task Deleted Successfully !");
     }catch(error){
       console.log('Error updating task:', error);
+      toast.error("SomeThing Went Wrong!");
     }
   }
 
@@ -105,7 +113,7 @@ function App() {
   // function to update the value of task
   const handleUpdateTask = async(id,newvalue)=>{
     if(input.current.value=""){
-      console.log("enter some value please");
+      toast.error("Task Cannot be Empty!");
       return;
     }
     const updatedTask = {...updatetaskdata,title:newvalue};
@@ -115,6 +123,7 @@ function App() {
       setdata((prevTasks)=> prevTasks.map((task)=> task.id===id ? {...task,title:newvalue}:task));
       clearInput();
       setEdit(false);
+      toast.success("Task Updated Successfully !");
       return;
     }
 
@@ -131,8 +140,10 @@ function App() {
       setdata((prevTasks)=> prevTasks.map((task)=> task.id===id ? {...task,title:updatedTaskData.title}:task));
       clearInput();
       setEdit(false);
+      toast.success("Task Updated Successfully !");
     } catch (error) {
       console.log('Error updating task:', error);
+      toast.error("SomeThing Went Wrong!");
     }
   }
 
